@@ -20,6 +20,7 @@ dependencies = [
     { name = "django" },
     { name = "django-enumchoicefield" },
     { name = "djangorestframework" },
+    { name = "drf-writable-nested" },
     { name = "pillow" },
     { name = "psycopg" },
     { name = "psycopg-binary" },
@@ -31,6 +32,7 @@ requires-dist = [
     { name = "django", specifier = "==5.2" },
     { name = "django-enumchoicefield", specifier = ">=3.0.1" },
     { name = "djangorestframework", specifier = ">=3.16.1" },
+    { name = "drf-writable-nested", specifier = ">=0.7.2" },
     { name = "pillow", specifier = "==12.1.0" },
     { name = "psycopg", specifier = ">=3.3.2" },
     { name = "psycopg-binary", specifier = ">=3.3.2" },
@@ -79,6 +81,14 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8a/95/5376fe618646fde6899b3cdc85fd959716bb67542e273a76a80d9f326f27/djangorestframework-3.16.1.tar.gz", hash = "sha256:166809528b1aced0a17dc66c24492af18049f2c9420dbd0be29422029cfc3ff7", size = 1089735, upload-time = "2025-08-06T17:50:53.251Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b0/ce/bf8b9d3f415be4ac5588545b5fcdbbb841977db1c1d923f7568eeabe1689/djangorestframework-3.16.1-py3-none-any.whl", hash = "sha256:33a59f47fb9c85ede792cbf88bde71893bcda0667bc573f784649521f1102cec", size = 1080442, upload-time = "2025-08-06T17:50:50.667Z" },
+]
+
+[[package]]
+name = "drf-writable-nested"
+version = "0.7.2"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e8/57/df87d92fbfc3f0f2ef1a49c47f2a83389a4a13b7acf62b8bf7b223627d82/drf_writable_nested-0.7.2-py3-none-any.whl", hash = "sha256:4a3d2737c1cbfafa690e30236b169112e5b23cfe3d288f3992b0651a1b828c4d", size = 10570, upload-time = "2025-03-10T19:59:05.482Z" },
 ]
 
 [[package]]

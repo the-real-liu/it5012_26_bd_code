@@ -9,6 +9,7 @@ dependencies = [
     "django==5.2",
     "django-enumchoicefield>=3.0.1",
     "djangorestframework>=3.16.1",
+    "drf-writable-nested>=0.7.2",
     "pillow==12.1.0",
     "psycopg>=3.3.2",
     "psycopg-binary>=3.3.2",

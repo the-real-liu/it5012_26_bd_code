@@ -5,6 +5,8 @@ const resourceMap = {
   courses: "admin/management/courses",
   subjects: "admin/management/subjects",
   lecturers: "admin/management/lecturers",
+
+  admin_reset_password: "admin/reset_password",
 };
 
 function normalizeRecord(record) {
@@ -57,6 +59,10 @@ export const dataProvider = {
 
   getOne: async (resource, params) => {
     const token = localStorage.getItem("token");
+
+    if (resource == "admin_reset_password") {
+      return { data: { id: params['id'] } }
+    }
 
     const response = await fetch(`${API_URL}/${resourceMap[resource]}/${params['id']}`, {
       headers: {

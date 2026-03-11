@@ -1,13 +1,14 @@
 from app.models import Account, Lecturer, Course, Subject, Student
 from rest_framework import serializers
 from enumchoicefield import ChoiceEnum, EnumChoiceField
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account 
-        fields = ['email']
+        fields = ['id', 'email']
 
-class LecturerSerializer(serializers.ModelSerializer):
+class LecturerSerializer(WritableNestedModelSerializer):
     account = AccountSerializer()
 
     class Meta:
@@ -30,9 +31,8 @@ class SubjectSerializer(serializers.ModelSerializer):
         model = Subject
         fields = ['subject_id', 'name', 'courses']
 
-class StudentSerializer(serializers.ModelSerializer):
+class StudentSerializer(WritableNestedModelSerializer):
     account = AccountSerializer()
-    subject = SubjectSerializer()
 
     class Meta:
         model = Student
@@ -76,26 +76,6 @@ class StudentCourseSerializer(serializers.ModelSerializer):
             return False
         return me.enrolment.filter(course_id=obj.course_id).exists()
 
-class UserType(ChoiceEnum):
-    administrator = "administrator"
-    lecturer = "lecturer"
-    student = "student"
-
-    def get_model(user_type):
-        if str(user_type) == str(UserType.administrator):
-            return None
-        elif str(user_type) == str(UserType.lecturer):
-            return Lecturer
-        else:
-            return Student
-
-class ResetUserPasswordSerializer(serializers.Serializer):
-    user_type = EnumChoiceField(enum_class=UserType)
-    user_id = serializers.IntegerField(required=True)
+class NewPasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
-
-class LoginSerializer(serializers.Serializer):
-    user_type = EnumChoiceField(enum_class=UserType)
-    email = serializers.IntegerField(required=True)
-    password = serializers.CharField(required=True)
 

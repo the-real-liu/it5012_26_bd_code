@@ -30,7 +30,7 @@ router.register(r"students", views.StudentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/admin/reset_user_password', views.ResetUserPassword.as_view()),
+    path('api/admin/reset_password/<int:id>/', views.ResetAccountPassword.as_view()),
     path("api/admin/management/", include(router.urls)),
     path("api/lecturer/dashboard", views.LecturerDashboardView.as_view()),
     path("api/student/dashboard", views.StudentDashboardView.as_view()),

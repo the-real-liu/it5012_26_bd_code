@@ -44,18 +44,20 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAdminUser]
 
-class ResetUserPassword(GenericAPIView):
+class ResetAccountPassword(APIView):
     permission_classes = [permissions.IsAdminUser]
-    serializer_class = ResetUserPasswordSerializer
 
-    def put(self, request):
-        new_password = request.data['new_password']
-        user_id = request.data['user_id']
-        user_model = UserType.get_model(request.data["user_type"])
-        obj = user_model.objects.get(pk=user_id)
-        obj.account.set_password(new_password)
-        obj.account.save()
-        return Response({'success': 1}, status=200)
+    def put(self, request, id):
+        serializer = NewPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        new_password = serializer.validated_data["new_password"]
+        obj = Account.objects.get(pk=id)
+        obj.set_password(new_password)
+        obj.save()
+        serializer = AccountSerializer(obj)
+        data = serializer.data
+        return Response(data)
 
 # Lecturer views
 class LecturerDashboardView(APIView):

@@ -1,12 +1,41 @@
 import { DataTable, List, ReferenceField, EditButton, DeleteButton } from 'react-admin';
+import { Button, useRecordContext } from 'react-admin';
+import { useNavigate } from 'react-router-dom';
+import LockIcon from '@mui/icons-material/Lock';
+
+const ChangePasswordButton = () => {
+  const record = useRecordContext();
+  const navigate = useNavigate();
+
+  if (!record) return null;
+
+  const handleClick = (event) => {
+    event.stopPropagation();
+    navigate(`/admin/reset_password/${record.account.id}`);
+  };
+
+  return (
+    <Button label="Change Password" onClick={handleClick}>
+      <LockIcon />
+    </Button>
+  );
+};
 
 export const AdminStudentList = () => (
     <List>
-        <DataTable bulkActionButtons={false}>
-            <DataTable.Col source="student_id" label="Student ID" />
+        <DataTable bulkActionButtons={false} rowClick="show">
+            <DataTable.Col source="student_id" label="Student ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
             <DataTable.Col source="account.email" label="Email" />
-            <DataTable.Col source="subject.name" label="Subject" />
+            <DataTable.Col label="Subject">
+              <ReferenceField source="subject" reference="subjects" />
+            </DataTable.Col>
+
+            <DataTable.Col label="Actions" sx={{ width: "15rem" }}>
+              <EditButton />
+              <DeleteButton mutationMode="pessimistic" />
+              <ChangePasswordButton />
+            </DataTable.Col>
         </DataTable>
     </List>
 );
@@ -14,8 +43,13 @@ export const AdminStudentList = () => (
 export const AdminCourseList = () => (
     <List>
         <DataTable bulkActionButtons={false}>
-            <DataTable.Col source="course_id" label="Course ID" />
+            <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
+
+            <DataTable.Col label="Actions" sx={{ width: "15rem" }}>
+              <EditButton />
+              <DeleteButton mutationMode="pessimistic" />
+            </DataTable.Col>
         </DataTable>
     </List>
 );
@@ -23,10 +57,10 @@ export const AdminCourseList = () => (
 export const AdminSubjectList = () => (
     <List>
         <DataTable bulkActionButtons={false}>
-            <DataTable.Col source="subject_id" label="Subject ID" />
+            <DataTable.Col source="subject_id" label="Subject ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
 
-            <DataTable.Col label="Actions">
+            <DataTable.Col label="Actions" sx={{ width: "15rem" }}>
               <EditButton />
               <DeleteButton mutationMode="pessimistic" />
             </DataTable.Col>
@@ -37,9 +71,15 @@ export const AdminSubjectList = () => (
 export const AdminLecturerList = () => (
     <List>
         <DataTable bulkActionButtons={false}>
-            <DataTable.Col source="lecturer_id" label="Lecturer ID" />
+            <DataTable.Col source="lecturer_id" label="Lecturer ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
             <DataTable.Col source="account.email" label="Email" />
+
+            <DataTable.Col label="Actions" sx={{ width: "15rem" }}>
+              <EditButton />
+              <DeleteButton mutationMode="pessimistic" />
+              <ChangePasswordButton />
+            </DataTable.Col>
         </DataTable>
     </List>
 );
