@@ -74,11 +74,19 @@ class ResetAccountPassword(APIView):
         data = serializer.data
         return Response(data)
 
+class AdminDashboardView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request):
+        me = request.user
+        serializer = AccountSerializer(me)
+        return Response(serializer.data)
+
 # Lecturer views
 class LecturerDashboardView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, format=None):
+    def get(self, request):
         me = request.user.lecturer
         serializer = LecturerDashboardSerializer(me)
         return Response(serializer.data)
@@ -99,17 +107,32 @@ class LecturerCoursesView(ListModelMixin, RetrieveModelMixin, GenericAPIView):
 class StudentDashboardView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, format=None):
+    def get(self, request):
         me = request.user.student
         serializer = StudentDashboardSerializer(me)
         return Response(serializer.data)
 
-class StudentCourseListView(APIView):
+class StudentEnrolmentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, format=None):
+    def get(self, request):
         me = request.user.student
         courses = me.subject.courses
         serializer = StudentCourseSerializer(courses, many=True, context={"student": me})
         return Response(serializer.data)
+
+    def put(self, request, pk):
+        serializer = EnrolDropSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        course = Course.objects.get(pk=pk)
+        is_enrolled = serializer.validated_data["is_enrolled"]
+
+        me = request.user.student
+        if is_enrolled:
+            me.enrolment.add(course)
+        else:
+            me.enrolment.remove(course)
+        me.save()
+        return Response(StudentCourseSerializer(course, context={"student": me}).data)
 

@@ -22,7 +22,7 @@ const ChangePasswordButton = () => {
 };
 
 export const AdminStudentList = () => (
-    <List>
+    <List pagination={false}>
         <DataTable bulkActionButtons={false} rowClick="show">
             <DataTable.Col source="student_id" label="Student ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
@@ -41,7 +41,7 @@ export const AdminStudentList = () => (
 );
 
 export const AdminCourseList = () => (
-    <List>
+    <List pagination={false}>
         <DataTable bulkActionButtons={false}>
             <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
@@ -55,7 +55,7 @@ export const AdminCourseList = () => (
 );
 
 export const AdminSubjectList = () => (
-    <List>
+    <List pagination={false}>
         <DataTable bulkActionButtons={false}>
             <DataTable.Col source="subject_id" label="Subject ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
@@ -69,7 +69,7 @@ export const AdminSubjectList = () => (
 );
 
 export const AdminLecturerList = () => (
-    <List>
+    <List pagination={false}>
         <DataTable bulkActionButtons={false}>
             <DataTable.Col source="lecturer_id" label="Lecturer ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />

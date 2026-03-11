@@ -80,3 +80,6 @@ class StudentCourseSerializer(serializers.ModelSerializer):
 class NewPasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
 
+class EnrolDropSerializer(serializers.Serializer):
+    is_enrolled = serializers.BooleanField(required=True)
+

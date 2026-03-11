@@ -1,4 +1,4 @@
-import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser, CustomRoutes } from "react-admin";
+import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser, CustomRoutes, usePermissions } from "react-admin";
 import { Route, Navigate } from 'react-router-dom';
 import { Layout } from "./Layout";
 import { dataProvider } from "./dataProvider";
@@ -7,14 +7,8 @@ import { AdminStudentList, AdminCourseList, AdminLecturerList, AdminSubjectList 
 import { AdminStudentCreate, AdminCourseCreate, AdminLecturerCreate, AdminSubjectCreate } from "./AdminCreates";
 import { AdminStudentEdit, AdminCourseEdit, AdminLecturerEdit, AdminSubjectEdit } from "./AdminEdits";
 import { AdminResetPassword } from "./AdminResetPassword";
-import { StudentShow, CourseShow, LecturerShow, SubjectShow, LecturerDashboardShow, CourseDetailShow } from "./Shows";
-import { LecturerCourseList } from "./Lists";
-
-const LecturerRoleResources = () => (
-    <>
-        <Resource name="lecturer_courses" options={{ label: 'My Courses' }} list={LecturerCourseList} show={CourseDetailShow} />
-    </>
-);
+import { StudentShow, CourseShow, LecturerShow, SubjectShow, AdminDashboardShow, LecturerDashboardShow, CourseDetailShow, StudentDashboardShow } from "./Shows";
+import { LecturerCourseList, StudentEnrolmentCourseList } from "./Lists";
 
 const AdminRoleResources = () => (
     <>
@@ -29,29 +23,58 @@ const AdminRoleResources = () => (
     </>
 );
 
+const LecturerRoleResources = () => (
+    <>
+        <Resource name="lecturer_courses" options={{ label: 'My Courses' }} list={LecturerCourseList} show={CourseDetailShow} />
+    </>
+);
+
+const StudentRoleResources = () => (
+    <>
+        <Resource name="student_enrolment" options={{ label: 'Enrolment' }} list={StudentEnrolmentCourseList} />
+    </>
+);
+
 const RoleResources = (permissions) => {
-  console.log(permissions);
   if (permissions === "admin") {
     return AdminRoleResources();
   } else if (permissions === "lecturer") {
     return LecturerRoleResources();
+  } else if (permissions === "student") {
+    return StudentRoleResources();
   } else {
     return (<></>);
   }
 }
 
-const LecturerDashboard = () => (
-  <>
-    <LecturerDashboardShow title="Dashboard" resource="lecturer_dashboard" id="singleton" options={{ label: 'Dashboard' }} />
-  </>
+const AdminDashboard = () => (
+    <AdminDashboardShow title="Dashboard" resource="admin_dashboard" id="singleton" />
 );
 
-export const App = () => {
+const LecturerDashboard = () => (
+    <LecturerDashboardShow title="Dashboard" resource="lecturer_dashboard" id="singleton" />
+);
 
-  return (
-      <Admin layout={Layout} authProvider={authProvider} dataProvider={dataProvider} dashboard={LecturerDashboard} requireAuth>
-          {permissions => RoleResources(permissions)}
-      </Admin>
-  );
+const StudentDashboard = () => (
+    <StudentDashboardShow title="Dashboard" resource="student_dashboard" id="singleton" />
+);
+
+const RoleDashboard = () => {
+  const { permissions } = usePermissions();
+  if (permissions === "admin") {
+    return AdminDashboard();
+  } else if (permissions === "lecturer") {
+    return LecturerDashboard();
+  } else if (permissions === "student") {
+    return StudentDashboard();
+  } else {
+    return (<></>);
+  }
 }
+
+export const App = () => (
+    <Admin layout={Layout} authProvider={authProvider} dataProvider={dataProvider} dashboard={RoleDashboard} requireAuth>
+        {permissions => RoleResources(permissions)}
+    </Admin>
+);
 

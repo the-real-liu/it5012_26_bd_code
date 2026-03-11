@@ -9,10 +9,14 @@ const resourceMap = {
   admin_reset_password: "admin/reset_password",
 
   lecturer_courses: "lecturer/courses",
+
+  student_enrolment: "student/enrolment",
 };
 
 const singletonMap = {
-  lecturer_dashboard: "lecturer/dashboard"
+  admin_dashboard: "admin/dashboard",
+  lecturer_dashboard: "lecturer/dashboard",
+  student_dashboard: "student/dashboard",
 };
 
 function normalizeRecord(record) {
