@@ -7,6 +7,12 @@ const resourceMap = {
   lecturers: "admin/management/lecturers",
 
   admin_reset_password: "admin/reset_password",
+
+  lecturer_courses: "lecturer/courses",
+};
+
+const singletonMap = {
+  lecturer_dashboard: "lecturer/dashboard"
 };
 
 function normalizeRecord(record) {
@@ -64,7 +70,14 @@ export const dataProvider = {
       return { data: { id: params['id'] } }
     }
 
-    const response = await fetch(`${API_URL}/${resourceMap[resource]}/${params['id']}`, {
+    var url = '';
+    if (params['id'] == "singleton") {
+      url = `${API_URL}/${singletonMap[resource]}`;
+    } else {
+      url = `${API_URL}/${resourceMap[resource]}/${params['id']}`;
+    }
+
+    const response = await fetch(url, {
       headers: {
         Authorization: `Token ${token}`,
       },
@@ -73,6 +86,9 @@ export const dataProvider = {
     const data = await response.json();
     const record = data.results || data;
 
+    if (params['id'] == "singleton") {
+      return { data: { ...record, id: "singleton" } };
+    }
     return { data: normalizeRecord(record) };
   },
 

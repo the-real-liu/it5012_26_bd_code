@@ -50,5 +50,12 @@ export const authProvider = {
     return Promise.resolve();
   },
 
-  getPermissions: () => Promise.resolve(),
+  getPermissions: async () => {
+      const response = await fetch("/api/my_role");
+      const data = await response.json();
+      if (!response.ok) {
+        return "unknown";
+      }
+      return data.role;
+  },
 };

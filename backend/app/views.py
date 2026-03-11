@@ -2,9 +2,24 @@ from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from app.models import *
 from app.serializers import *
+
+# Common views
+class MyRoleView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        me = request.user
+        role = "unknown"
+        if me.is_staff:
+            role = "admin"
+        elif hasattr(me, "student"):
+            role = "student"
+        elif hasattr(me, "lecturer"):
+            role = "lecturer"
+        return Response({ "role": role })
 
 # Administrator views
 
@@ -67,6 +82,18 @@ class LecturerDashboardView(APIView):
         me = request.user.lecturer
         serializer = LecturerDashboardSerializer(me)
         return Response(serializer.data)
+
+class LecturerCoursesView(ListModelMixin, RetrieveModelMixin, GenericAPIView):
+    serializer_class = CourseDetailSerializer 
+
+    def get_queryset(self):
+        me = self.request.user.lecturer
+        return me.course_set
+
+    def get(self, request, *args, **kwargs):
+        if 'pk' in kwargs:
+            return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
 
 # Student views
 class StudentDashboardView(APIView):

@@ -48,10 +48,11 @@ class LecturerDashboardSerializer(serializers.ModelSerializer):
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     lecturer = LecturerSerializer()
+    student_set = StudentSerializer(many=True)
 
     class Meta:
         model = Course
-        fields = ['course_id', 'name', 'schedule', 'lecturer']
+        fields = ['course_id', 'name', 'schedule', 'lecturer', 'student_set']
 
 class StudentDashboardSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
