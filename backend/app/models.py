@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
-from django.contrib.postgres.fields import ArrayField, DateTimeRangeField
 from app.managers import AccountUserManager
 
 class Account(AbstractUser):
@@ -25,7 +24,6 @@ class Lecturer(models.Model):
 class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
-    schedule = ArrayField(DateTimeRangeField(), blank=True)
     lecturer = models.ForeignKey(Lecturer, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):

@@ -22,10 +22,10 @@ class Command(BaseCommand):
         lecturer_john, _ = self.create_account('John', 'john@example.com', Lecturer)
         lecturer_mary, _ = self.create_account('Mary', 'mary@example.com', Lecturer)
 
-        course_math, _ = Course.objects.update_or_create(name='Math', defaults={'schedule': [], 'lecturer': lecturer_john})
-        course_music, _ = Course.objects.update_or_create(name='Music', defaults={'schedule': [], 'lecturer': lecturer_mary})
-        course_english, _ = Course.objects.update_or_create(name='English', defaults={'schedule': [], 'lecturer': lecturer_john})
-        course_history, _ = Course.objects.update_or_create(name='History', defaults={'schedule': [], 'lecturer': lecturer_mary})
+        course_math, _ = Course.objects.update_or_create(name='Math', defaults={'lecturer': lecturer_john})
+        course_music, _ = Course.objects.update_or_create(name='Music', defaults={'lecturer': lecturer_mary})
+        course_english, _ = Course.objects.update_or_create(name='English', defaults={'lecturer': lecturer_john})
+        course_history, _ = Course.objects.update_or_create(name='History', defaults={'lecturer': lecturer_mary})
 
         subject_history, _ = Subject.objects.update_or_create(name='History', defaults={})
         subject_history.courses.add(course_english)

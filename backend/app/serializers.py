@@ -18,7 +18,7 @@ class LecturerSerializer(WritableNestedModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['course_id', 'name', 'schedule']
+        fields = ['course_id', 'name']
 
 class SubjectSerializer(serializers.ModelSerializer):
     courses = serializers.PrimaryKeyRelatedField(
@@ -52,7 +52,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['course_id', 'name', 'schedule', 'lecturer', 'student_set']
+        fields = ['course_id', 'name', 'lecturer', 'student_set']
 
 class StudentDashboardSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
@@ -69,7 +69,7 @@ class StudentCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['course_id', 'name', 'schedule', 'lecturer', 'is_enrolled']
+        fields = ['course_id', 'name', 'lecturer', 'is_enrolled']
 
     def get_is_enrolled(self, obj):
         me = self.context.get("student")
