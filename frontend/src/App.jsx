@@ -9,6 +9,7 @@ import { AdminStudentEdit, AdminCourseEdit, AdminLecturerEdit, AdminSubjectEdit 
 import { AdminResetPassword } from "./AdminResetPassword";
 import { StudentShow, CourseShow, LecturerShow, SubjectShow, AdminDashboardShow, LecturerDashboardShow, CourseDetailShow, StudentDashboardShow } from "./Shows";
 import { LecturerCourseList, StudentEnrolmentCourseList } from "./Lists";
+import { AssignGradesPage } from "./AssignGradesPage";
 
 const AdminRoleResources = () => (
     <>
@@ -26,6 +27,9 @@ const AdminRoleResources = () => (
 const LecturerRoleResources = () => (
     <>
         <Resource name="lecturer_courses" options={{ label: 'My Courses' }} list={LecturerCourseList} show={CourseDetailShow} />
+        <CustomRoutes>
+          <Route path="/assign_grades" element={<AssignGradesPage />} />
+        </CustomRoutes>
     </>
 );
 

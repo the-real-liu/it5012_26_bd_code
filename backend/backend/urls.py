@@ -38,7 +38,8 @@ urlpatterns = [
 
     path("api/lecturer/dashboard/", views.LecturerDashboardView.as_view()),
     path("api/lecturer/courses/", views.LecturerCoursesView.as_view()),
-    path("api/lecturer/courses/<int:pk>", views.LecturerCoursesView.as_view()),
+    path("api/lecturer/courses/<int:pk>/", views.LecturerCoursesView.as_view()),
+    path("api/lecturer/coursegrades/<int:course_id>/", views.LecturerCourseGradesView.as_view()),
 
     path("api/student/dashboard/", views.StudentDashboardView.as_view()),
     path("api/student/enrolment/", views.StudentEnrolmentView.as_view()),

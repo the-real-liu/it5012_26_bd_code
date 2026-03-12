@@ -103,6 +103,45 @@ class LecturerCoursesView(ListModelMixin, RetrieveModelMixin, GenericAPIView):
             return self.retrieve(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
 
+class LecturerCourseGradesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def sync(self, course, me):
+        # synchronize the grade table
+        for student in course.student_set.all():
+            Grade.objects.update_or_create(student=student, course=course, create_defaults={"given_by": me})
+
+    def get(self, request, course_id):
+        me = request.user.lecturer
+        course = Course.objects.get(pk=course_id)
+        if course.lecturer != me:
+            return HttpResponseForbidden()
+        self.sync(course, me)
+        serializer = CourseGradesSerializer({"course_id": course_id, "student_grades": course.grade_set.all()})
+        return Response(serializer.data)
+
+    def put(self, request, course_id):
+        me = request.user.lecturer
+        course = Course.objects.get(pk=course_id)
+        if course.lecturer != me:
+            return HttpResponseForbidden()
+
+        serializer = CourseGradesSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        for grade_data in serializer.validated_data["student_grades"]:
+            student_id = grade_data['student']['student_id']
+            percentage = grade_data['percentage']
+            Grade.objects.update_or_create(course=course, student_id=student_id, defaults={
+                "given_by": me,
+                "percentage": percentage,
+            })
+
+        self.sync(course, me)
+        serializer = CourseGradesSerializer({"course_id": course_id, "student_grades": course.grade_set.all()})
+        return Response(serializer.data)
+
+
 # Student views
 class StudentDashboardView(APIView):
     permission_classes = [permissions.IsAuthenticated]

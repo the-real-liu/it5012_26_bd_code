@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.core.validators import MinValueValidator, MaxValueValidator
 from app.managers import AccountUserManager
 
 class Account(AbstractUser):
@@ -47,5 +48,14 @@ class Student(models.Model):
     def __str__(self):
         return f"Student#{self.student_id} {self.account.email}"
 
-# TODO grades
+class Grade(models.Model):
+    pk = models.CompositePrimaryKey("student_id", "course_id")
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    given_by = models.ForeignKey(Lecturer, null=True, blank=True, on_delete=models.SET_NULL)
+    percentage = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True, default=None)
+    assign_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Student#{self.student_id} Course#{self.course} {self.percentage}%"
 

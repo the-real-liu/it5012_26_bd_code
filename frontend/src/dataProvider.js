@@ -9,6 +9,7 @@ const resourceMap = {
   admin_reset_password: "admin/reset_password",
 
   lecturer_courses: "lecturer/courses",
+  lecturer_coursegrades: "lecturer/coursegrades",
 
   student_enrolment: "student/enrolment",
 };

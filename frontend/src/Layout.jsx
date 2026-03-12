@@ -1,8 +1,28 @@
 import { ReactNode } from "react";
-import { Layout as RALayout, CheckForApplicationUpdate } from "react-admin";
+import { Layout as RALayout, CheckForApplicationUpdate, Menu, usePermissions } from "react-admin";
+import SettingsIcon from '@mui/icons-material/Settings';
+
+const MyMenu = () => {
+  const { permissions, isLoading } = usePermissions();
+  if (isLoading) return null;
+
+  return (
+    <Menu>
+      <Menu.DashboardItem />
+      <Menu.ResourceItems />
+      {permissions === "lecturer" && (
+        <Menu.Item
+          to="/assign_grades"
+          primaryText="Assign Grades"
+          leftIcon={<SettingsIcon />}
+        />
+      )}
+    </Menu>
+  );
+};
 
 export const Layout = ({ children }) => (
-  <RALayout>
+  <RALayout menu={MyMenu}>
     {children}
     <CheckForApplicationUpdate />
   </RALayout>

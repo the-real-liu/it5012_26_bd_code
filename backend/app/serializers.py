@@ -1,4 +1,4 @@
-from app.models import Account, Lecturer, Course, Subject, Student
+from app.models import Account, Lecturer, Course, Subject, Student, Grade
 from rest_framework import serializers
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 from drf_writable_nested.serializers import WritableNestedModelSerializer
@@ -82,4 +82,17 @@ class NewPasswordSerializer(serializers.Serializer):
 
 class EnrolDropSerializer(serializers.Serializer):
     is_enrolled = serializers.BooleanField(required=True)
+
+class StudentGradeSerializer(serializers.ModelSerializer):
+    student_id = serializers.CharField(source='student.student_id')
+    student_name = serializers.CharField(source='student.name')
+
+    class Meta:
+        model = Grade
+        fields = ['student_id', 'student_name', 'percentage']
+        read_only_fields = ['student_name']
+
+class CourseGradesSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField()
+    student_grades = StudentGradeSerializer(many=True)
 
