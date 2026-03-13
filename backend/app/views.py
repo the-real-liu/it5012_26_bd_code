@@ -93,6 +93,7 @@ class LecturerDashboardView(APIView):
 
 class LecturerCoursesView(ListModelMixin, RetrieveModelMixin, GenericAPIView):
     serializer_class = CourseDetailSerializer 
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         me = self.request.user.lecturer
@@ -174,4 +175,23 @@ class StudentEnrolmentView(APIView):
             me.enrolment.remove(course)
         me.save()
         return Response(StudentCourseSerializer(course, context={"student": me}).data)
+
+class StudentGradeView(ListModelMixin, GenericAPIView):
+    serializer_class = GradeDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        me = self.request.user.student
+        return me.grade_set
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class StudentProgressView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        me = request.user.student
+        serializer = StudentProgressSerializer(me)
+        return Response(serializer.data)
 

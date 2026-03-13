@@ -8,7 +8,7 @@ import { AdminStudentCreate, AdminCourseCreate, AdminLecturerCreate, AdminSubjec
 import { AdminStudentEdit, AdminCourseEdit, AdminLecturerEdit, AdminSubjectEdit } from "./AdminEdits";
 import { AdminResetPassword } from "./AdminResetPassword";
 import { StudentShow, CourseShow, LecturerShow, SubjectShow, AdminDashboardShow, LecturerDashboardShow, CourseDetailShow, StudentDashboardShow } from "./Shows";
-import { LecturerCourseList, StudentEnrolmentCourseList } from "./Lists";
+import { LecturerCourseList, StudentEnrolmentCourseList, StudentGradeList } from "./Lists";
 import { AssignGradesPage } from "./AssignGradesPage";
 
 const AdminRoleResources = () => (
@@ -36,6 +36,7 @@ const LecturerRoleResources = () => (
 const StudentRoleResources = () => (
     <>
         <Resource name="student_enrolment" options={{ label: 'Enrolment' }} list={StudentEnrolmentCourseList} />
+        <Resource name="student_grades" options={{ label: 'My Results' }} list={StudentGradeList} />
     </>
 );
 

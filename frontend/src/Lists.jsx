@@ -1,7 +1,9 @@
-import { DataTable, List, ReferenceField, ShowButton, useRecordContext, useResourceContext, useDataProvider, useNotify, useRefresh, Button, Confirm } from 'react-admin';
+import { DataTable, List, ReferenceField, DateField, ShowButton, useRecordContext, useResourceContext, useDataProvider, useNotify, useRefresh, Button, Confirm, Labeled } from 'react-admin';
 import { useState } from "react";
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import { Card, CardContent, Box } from '@mui/material';
+import { StudentProgressShowBase } from "./Shows";
 
 const EnrolDropButton = (props) => {
     const record = useRecordContext();
@@ -71,6 +73,27 @@ export const StudentEnrolmentCourseList = () => (
               <EnrolDropButton label="Enrol" />
             ) )} />
         </DataTable>
+    </List>
+);
+
+export const StudentGradeList = () => (
+    <List pagination={false}>
+        <DataTable bulkActionButtons={false}>
+            <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
+            <DataTable.Col source="course.name" label="Course Name" />
+            <DataTable.Col source="given_by.name" label="Given By" />
+            <DataTable.Col label="Assign Date">
+              <DateField source="assign_date" showDate showTime />
+            </DataTable.Col>
+            <DataTable.Col source="percentage" label="Percentage" />
+        </DataTable>
+        <Card>
+          <CardContent sx={{ width: '100%' }}>
+            <Labeled label="Overall Academic Progress" sx={{ width: '100%' }}>
+              <StudentProgressShowBase resource="student_progress" id="singleton" />
+            </Labeled>
+          </CardContent>
+        </Card>
     </List>
 );
 

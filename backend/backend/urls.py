@@ -44,6 +44,8 @@ urlpatterns = [
     path("api/student/dashboard/", views.StudentDashboardView.as_view()),
     path("api/student/enrolment/", views.StudentEnrolmentView.as_view()),
     path("api/student/enrolment/<int:pk>/", views.StudentEnrolmentView.as_view()),
+    path("api/student/grades/", views.StudentGradeView.as_view()),
+    path("api/student/progress/", views.StudentProgressView.as_view()),
 
     path("auth/", include("dj_rest_auth.urls")),
     path("api/my_role/", views.MyRoleView.as_view()),

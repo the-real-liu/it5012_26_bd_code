@@ -12,12 +12,14 @@ const resourceMap = {
   lecturer_coursegrades: "lecturer/coursegrades",
 
   student_enrolment: "student/enrolment",
+  student_grades: "student/grades",
 };
 
 const singletonMap = {
   admin_dashboard: "admin/dashboard",
   lecturer_dashboard: "lecturer/dashboard",
   student_dashboard: "student/dashboard",
+  student_progress: "student/progress",
 };
 
 function normalizeRecord(record) {

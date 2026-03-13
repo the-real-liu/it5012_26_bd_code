@@ -1,5 +1,7 @@
-import { Show, SimpleShowLayout, FunctionField, TextField, EmailField, ReferenceArrayField, ReferenceField, DataTable, ArrayField } from 'react-admin';
+import { Show, ShowBase, SimpleShowLayout, FunctionField, NumberField, TextField, EmailField, ReferenceArrayField, ReferenceField, DataTable, ArrayField, Labeled, useRecordContext } from 'react-admin';
 import Alert from '@mui/material/Alert';
+import LinearProgress from '@mui/material/LinearProgress';
+import { Card, CardContent, Box } from '@mui/material';
 
 export const StudentShow = (props) => (
     <Show {...props}>
@@ -105,4 +107,29 @@ export const StudentDashboardShow = (props) => (
         </SimpleShowLayout>
     </Show>
 );
+
+export const StudentProgressBar = () => {
+    const record = useRecordContext();
+    if (!record) return null;
+
+    return (
+      <LinearProgress variant="determinate" value={100 * record["pass_count"] / record["total_count"]} />
+    );
+}
+
+export const StudentProgressShowBase = (props) => {
+
+    return (<ShowBase {...props} sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%' }}>
+        <SimpleShowLayout sx={{ width: '100%' }}>
+            <NumberField source="avg_score" label="Average Score" />
+            <NumberField source="gpa" label="GPA" />
+            <NumberField source="total_count" label="Total Course Count" />
+            <NumberField source="pass_count" label="Passed Course Count" />
+            <Labeled label="Overall Progress" sx={{ width: '100%' }}>
+              <StudentProgressBar />
+            </Labeled>
+        </SimpleShowLayout></Box>
+    </ShowBase>);
+};
 
