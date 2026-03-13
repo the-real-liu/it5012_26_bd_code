@@ -24,7 +24,7 @@ with open("/data/secret_key.txt") as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 CORS_ORIGIN_ALLOW_ALL = DEBUG
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = []
