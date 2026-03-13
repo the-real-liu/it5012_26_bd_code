@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from app.models import Account, Lecturer, Course, Subject, Student
+import os
 
 class Command(BaseCommand):
     help = 'Seeds the database with test data'
@@ -10,6 +11,9 @@ class Command(BaseCommand):
             account_extra.setdefault("is_staff", True)
             account_extra.setdefault("is_superuser", True)
         account, created = Account.objects.update_or_create(email=email, **account_extra)
+        if 'SET_PASS' in os.environ:
+            account.set_password(os.environ['SET_PASS'])
+            account.save()
         if model is None:
             return account, created
         return model.objects.update_or_create(name=name, defaults={'account': account, **defaults})
