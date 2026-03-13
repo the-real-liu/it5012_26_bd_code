@@ -2,9 +2,8 @@
 FROM node:24 AS frontend-builder
 WORKDIR /app/frontend
 RUN corepack enable
-COPY frontend/package.json frontend/yarn.lock ./
-RUN yarn install --frozen-lockfile
 COPY frontend .
+RUN yarn install
 RUN yarn build
 
 # backend
