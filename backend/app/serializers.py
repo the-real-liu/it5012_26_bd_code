@@ -128,5 +128,5 @@ class StudentProgressSerializer(serializers.ModelSerializer):
         return student.enrolment.count()
 
     def get_pass_count(self, student):
-        return student.grade_set.exclude(percentage__lt=50).count()
+        return student.grade_set.exclude(percentage__lt=50).exclude(percentage__isnull=True).count()
 
