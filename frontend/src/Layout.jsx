@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Layout as RALayout, CheckForApplicationUpdate, Menu, usePermissions } from "react-admin";
-import SettingsIcon from '@mui/icons-material/Settings';
+import EditIcon from '@mui/icons-material/Edit';
 
 const MyMenu = () => {
   const { permissions, isLoading } = usePermissions();
@@ -14,7 +14,7 @@ const MyMenu = () => {
         <Menu.Item
           to="/assign_grades"
           primaryText="Assign Grades"
-          leftIcon={<SettingsIcon />}
+          leftIcon={<EditIcon />}
         />
       )}
     </Menu>
