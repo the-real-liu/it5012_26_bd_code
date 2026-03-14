@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import include, path
 
@@ -29,24 +30,23 @@ router.register(r"subjects", views.SubjectViewSet)
 router.register(r"students", views.StudentViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-
     path("api/admin/dashboard/", views.AdminDashboardView.as_view()),
     path("api/admin/management/", include(router.urls)),
-    path('api/admin/reset_password/<int:id>/', views.ResetAccountPassword.as_view()),
-
+    path("api/admin/reset_password/<int:id>/", views.ResetAccountPassword.as_view()),
     path("api/lecturer/dashboard/", views.LecturerDashboardView.as_view()),
     path("api/lecturer/courses/", views.LecturerCoursesView.as_view()),
     path("api/lecturer/courses/<int:pk>/", views.LecturerCoursesView.as_view()),
-    path("api/lecturer/coursegrades/<int:course_id>/", views.LecturerCourseGradesView.as_view()),
-
+    path(
+        "api/lecturer/coursegrades/<int:course_id>/",
+        views.LecturerCourseGradesView.as_view(),
+    ),
     path("api/student/dashboard/", views.StudentDashboardView.as_view()),
     path("api/student/enrolment/", views.StudentEnrolmentView.as_view()),
     path("api/student/enrolment/<int:pk>/", views.StudentEnrolmentView.as_view()),
     path("api/student/grades/", views.StudentGradeView.as_view()),
     path("api/student/progress/", views.StudentProgressView.as_view()),
-
     path("auth/", include("dj_rest_auth.urls")),
     path("api/my_role/", views.MyRoleView.as_view()),
 ]

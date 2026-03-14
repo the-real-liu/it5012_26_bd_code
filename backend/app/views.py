@@ -6,6 +6,7 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from app.models import *
 from app.serializers import *
 
+
 # Common views
 class MyRoleView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -19,9 +20,11 @@ class MyRoleView(APIView):
             role = "student"
         elif hasattr(me, "lecturer"):
             role = "lecturer"
-        return Response({ "role": role })
+        return Response({"role": role})
+
 
 # Administrator views
+
 
 class LecturerViewSet(viewsets.ModelViewSet):
     """
@@ -32,6 +35,7 @@ class LecturerViewSet(viewsets.ModelViewSet):
     serializer_class = LecturerSerializer
     permission_classes = [permissions.IsAdminUser]
 
+
 class CourseViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows courses to be viewed or edited by administrators.
@@ -40,6 +44,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all().order_by("course_id")
     serializer_class = CourseSerializer
     permission_classes = [permissions.IsAdminUser]
+
 
 class SubjectViewSet(viewsets.ModelViewSet):
     """
@@ -50,6 +55,7 @@ class SubjectViewSet(viewsets.ModelViewSet):
     serializer_class = SubjectSerializer
     permission_classes = [permissions.IsAdminUser]
 
+
 class StudentViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows students to be viewed or edited by administrators.
@@ -58,6 +64,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all().order_by("student_id")
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAdminUser]
+
 
 class ResetAccountPassword(APIView):
     permission_classes = [permissions.IsAdminUser]
@@ -74,6 +81,7 @@ class ResetAccountPassword(APIView):
         data = serializer.data
         return Response(data)
 
+
 class AdminDashboardView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
@@ -81,6 +89,7 @@ class AdminDashboardView(APIView):
         me = request.user
         serializer = AccountSerializer(me)
         return Response(serializer.data)
+
 
 # Lecturer views
 class LecturerDashboardView(APIView):
@@ -91,8 +100,9 @@ class LecturerDashboardView(APIView):
         serializer = LecturerDashboardSerializer(me)
         return Response(serializer.data)
 
+
 class LecturerCoursesView(ListModelMixin, RetrieveModelMixin, GenericAPIView):
-    serializer_class = CourseDetailSerializer 
+    serializer_class = CourseDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -100,9 +110,10 @@ class LecturerCoursesView(ListModelMixin, RetrieveModelMixin, GenericAPIView):
         return me.course_set
 
     def get(self, request, *args, **kwargs):
-        if 'pk' in kwargs:
+        if "pk" in kwargs:
             return self.retrieve(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
+
 
 class LecturerCourseGradesView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -110,7 +121,9 @@ class LecturerCourseGradesView(APIView):
     def sync(self, course, me):
         # synchronize the grade table
         for student in course.student_set.all():
-            Grade.objects.update_or_create(student=student, course=course, create_defaults={"given_by": me})
+            Grade.objects.update_or_create(
+                student=student, course=course, create_defaults={"given_by": me}
+            )
 
     def get(self, request, course_id):
         me = request.user.lecturer
@@ -118,7 +131,9 @@ class LecturerCourseGradesView(APIView):
         if course.lecturer != me:
             return HttpResponseForbidden()
         self.sync(course, me)
-        serializer = CourseGradesSerializer({"course_id": course_id, "student_grades": course.grade_set.all()})
+        serializer = CourseGradesSerializer(
+            {"course_id": course_id, "student_grades": course.grade_set.all()}
+        )
         return Response(serializer.data)
 
     def put(self, request, course_id):
@@ -131,15 +146,21 @@ class LecturerCourseGradesView(APIView):
         serializer.is_valid(raise_exception=True)
 
         for grade_data in serializer.validated_data["student_grades"]:
-            student_id = grade_data['student']['student_id']
-            percentage = grade_data['percentage']
-            Grade.objects.update_or_create(course=course, student_id=student_id, defaults={
-                "given_by": me,
-                "percentage": percentage,
-            })
+            student_id = grade_data["student"]["student_id"]
+            percentage = grade_data["percentage"]
+            Grade.objects.update_or_create(
+                course=course,
+                student_id=student_id,
+                defaults={
+                    "given_by": me,
+                    "percentage": percentage,
+                },
+            )
 
         self.sync(course, me)
-        serializer = CourseGradesSerializer({"course_id": course_id, "student_grades": course.grade_set.all()})
+        serializer = CourseGradesSerializer(
+            {"course_id": course_id, "student_grades": course.grade_set.all()}
+        )
         return Response(serializer.data)
 
 
@@ -152,13 +173,16 @@ class StudentDashboardView(APIView):
         serializer = StudentDashboardSerializer(me)
         return Response(serializer.data)
 
+
 class StudentEnrolmentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         me = request.user.student
         courses = me.subject.courses
-        serializer = StudentCourseSerializer(courses, many=True, context={"student": me})
+        serializer = StudentCourseSerializer(
+            courses, many=True, context={"student": me}
+        )
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -176,6 +200,7 @@ class StudentEnrolmentView(APIView):
         me.save()
         return Response(StudentCourseSerializer(course, context={"student": me}).data)
 
+
 class StudentGradeView(ListModelMixin, GenericAPIView):
     serializer_class = GradeDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -187,6 +212,7 @@ class StudentGradeView(ListModelMixin, GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+
 class StudentProgressView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -194,4 +220,3 @@ class StudentProgressView(APIView):
         me = request.user.student
         serializer = StudentProgressSerializer(me)
         return Response(serializer.data)
-

@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from app.managers import AccountUserManager
 
+
 class Account(AbstractUser):
     username = None
     email = models.EmailField(max_length=254, unique=True)
@@ -14,6 +15,7 @@ class Account(AbstractUser):
     def __str__(self):
         return self.email
 
+
 class Lecturer(models.Model):
     lecturer_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
@@ -22,13 +24,17 @@ class Lecturer(models.Model):
     def __str__(self):
         return f"Lecturer#{self.lecturer_id} {self.account.email}"
 
+
 class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
-    lecturer = models.ForeignKey(Lecturer, null=True, blank=True, on_delete=models.SET_NULL)
+    lecturer = models.ForeignKey(
+        Lecturer, null=True, blank=True, on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return f"Course#{self.course_id} {self.name}"
+
 
 class Subject(models.Model):
     subject_id = models.AutoField(primary_key=True)
@@ -38,24 +44,34 @@ class Subject(models.Model):
     def __str__(self):
         return f"Subject#{self.subject_id} {self.name}"
 
+
 class Student(models.Model):
     student_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.PROTECT)
+    subject = models.ForeignKey(
+        Subject, null=True, blank=True, on_delete=models.PROTECT
+    )
     enrolment = models.ManyToManyField(Course, blank=True)
 
     def __str__(self):
         return f"Student#{self.student_id} {self.account.email}"
 
+
 class Grade(models.Model):
     pk = models.CompositePrimaryKey("student_id", "course_id")
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    given_by = models.ForeignKey(Lecturer, null=True, blank=True, on_delete=models.SET_NULL)
-    percentage = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True, default=None)
+    given_by = models.ForeignKey(
+        Lecturer, null=True, blank=True, on_delete=models.SET_NULL
+    )
+    percentage = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        blank=True,
+        null=True,
+        default=None,
+    )
     assign_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Student#{self.student_id} Course#{self.course} {self.percentage}%"
-
