@@ -4,6 +4,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Card, CardContent, Box } from '@mui/material';
 import { StudentProgressShowBase } from "./Shows";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const EnrolDropButton = (props) => {
     const record = useRecordContext();
@@ -26,7 +28,11 @@ const EnrolDropButton = (props) => {
               },
             });
 
-            notify("Enrolled!");
+            if (dropping) {
+              notify("Dropped!");
+            } else {
+              notify("Enrolled!");
+            }
             refresh();
         } catch (error) {
             notify("Cannot enrol due to error", { type: "error" });
@@ -35,7 +41,10 @@ const EnrolDropButton = (props) => {
 
     return (
       <>
-        <Button {...otherProps} onClick={(e) => {e.currentTarget.blur();setOpen(true)}} />
+        <Button {...otherProps} onClick={(e) => {e.currentTarget.blur();setOpen(true)}}>
+            {(!dropping && <AddIcon />)}
+            {(dropping && <RemoveIcon />)}
+        </Button>
         <Confirm
           isOpen={open}
           title="Confirm"
