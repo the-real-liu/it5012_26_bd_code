@@ -1,4 +1,4 @@
-import { handleError, getCookie } from './utils';
+import { handleError, getCookie } from "./utils";
 
 const API_URL = "/api";
 
@@ -27,7 +27,7 @@ const singletonMap = {
 function normalizeRecord(record) {
   if (record.id) return record;
 
-  const idKey = Object.keys(record).find(k => k.endsWith("_id"));
+  const idKey = Object.keys(record).find((k) => k.endsWith("_id"));
 
   return {
     ...record,
@@ -58,14 +58,14 @@ export const dataProvider = {
     const token = localStorage.getItem("token");
 
     if (resource == "admin_reset_password") {
-      return { data: { id: params['id'] } }
+      return { data: { id: params["id"] } };
     }
 
-    var url = '';
-    if (params['id'] == "singleton") {
+    var url = "";
+    if (params["id"] == "singleton") {
       url = `${API_URL}/${singletonMap[resource]}`;
     } else {
-      url = `${API_URL}/${resourceMap[resource]}/${params['id']}`;
+      url = `${API_URL}/${resourceMap[resource]}/${params["id"]}`;
     }
 
     const response = await fetch(url, {
@@ -77,7 +77,7 @@ export const dataProvider = {
     const data = await response.json();
     const record = data.results || data;
 
-    if (params['id'] == "singleton") {
+    if (params["id"] == "singleton") {
       return { data: { ...record, id: "singleton" } };
     }
     return { data: normalizeRecord(record) };
@@ -91,7 +91,7 @@ export const dataProvider = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Token ${token}`,
-        "X-CSRFToken": getCookie("csrftoken")
+        "X-CSRFToken": getCookie("csrftoken"),
       },
       body: JSON.stringify(params.data),
     });
@@ -105,15 +105,18 @@ export const dataProvider = {
   update: async (resource, params) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_URL}/${resourceMap[resource]}/${params['id']}/`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
-        "X-CSRFToken": getCookie("csrftoken")
+    const response = await fetch(
+      `${API_URL}/${resourceMap[resource]}/${params["id"]}/`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify(params.data),
       },
-      body: JSON.stringify(params.data),
-    });
+    );
 
     const data = await response.json();
     const record = data.results || data;
@@ -124,13 +127,16 @@ export const dataProvider = {
   delete: async (resource, params) => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${API_URL}/${resourceMap[resource]}/${params['id']}/`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Token ${token}`,
-        "X-CSRFToken": getCookie("csrftoken")
+    const response = await fetch(
+      `${API_URL}/${resourceMap[resource]}/${params["id"]}/`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Token ${token}`,
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
       },
-    });
+    );
 
     const data = handleError(await response);
     const record = data.results || data;
@@ -140,9 +146,10 @@ export const dataProvider = {
 
   getMany: async (resource, params) => {
     const data = await Promise.all(
-      params.ids.map(id => dataProvider.getOne(resource, { id }).then(data => data['data']))
+      params.ids.map((id) =>
+        dataProvider.getOne(resource, { id }).then((data) => data["data"]),
+      ),
     );
     return { data };
   },
 };
-

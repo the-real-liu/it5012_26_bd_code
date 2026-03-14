@@ -1,6 +1,11 @@
 import { ReactNode } from "react";
-import { Layout as RALayout, CheckForApplicationUpdate, Menu, usePermissions } from "react-admin";
-import EditIcon from '@mui/icons-material/Edit';
+import {
+  Layout as RALayout,
+  CheckForApplicationUpdate,
+  Menu,
+  usePermissions,
+} from "react-admin";
+import EditIcon from "@mui/icons-material/Edit";
 
 const MyMenu = () => {
   const { permissions, isLoading } = usePermissions();

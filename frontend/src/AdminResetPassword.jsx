@@ -1,10 +1,10 @@
-import { SimpleForm, TextInput, Edit, Toolbar, SaveButton } from 'react-admin';
-import { useParams } from 'react-router-dom';
+import { SimpleForm, TextInput, Edit, Toolbar, SaveButton } from "react-admin";
+import { useParams } from "react-router-dom";
 
-const ResetPasswordToolbar = props => (
-    <Toolbar {...props} >
-        <SaveButton />
-    </Toolbar>
+const ResetPasswordToolbar = (props) => (
+  <Toolbar {...props}>
+    <SaveButton />
+  </Toolbar>
 );
 
 export const AdminResetPassword = (props) => {
@@ -18,4 +18,3 @@ export const AdminResetPassword = (props) => {
     </Edit>
   );
 };
-

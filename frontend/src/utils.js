@@ -1,8 +1,8 @@
 export function getCookie(name) {
-  const cookies = document.cookie.split(';');
+  const cookies = document.cookie.split(";");
   for (let cookie of cookies) {
     cookie = cookie.trim();
-    if (cookie.startsWith(name + '=')) {
+    if (cookie.startsWith(name + "=")) {
       return decodeURIComponent(cookie.substring(name.length + 1));
     }
   }
@@ -15,4 +15,3 @@ export function handleError(response) {
   }
   return response;
 }
-
