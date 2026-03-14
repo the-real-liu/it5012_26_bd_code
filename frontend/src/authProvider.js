@@ -1,10 +1,10 @@
 import { handleError, getCookie } from './utils';
 
 export const authProvider = {
-  login: async ({ username, password }) => {
+  login: async ({ email, password }) => {
     const request = new Request('/auth/login/', {
       method: 'POST',
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
       headers: {
         'Content-Type': 'application/json',
         "X-CSRFToken": getCookie("csrftoken")

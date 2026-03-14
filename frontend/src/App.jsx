@@ -1,4 +1,4 @@
-import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser, CustomRoutes, usePermissions } from "react-admin";
+import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser, CustomRoutes, usePermissions, LoginWithEmail } from "react-admin";
 import { Route, Navigate } from 'react-router-dom';
 import { Layout } from "./Layout";
 import { dataProvider } from "./dataProvider";
@@ -78,7 +78,7 @@ const RoleDashboard = () => {
 }
 
 export const App = () => (
-    <Admin layout={Layout} authProvider={authProvider} dataProvider={dataProvider} dashboard={RoleDashboard} requireAuth>
+    <Admin layout={Layout} authProvider={authProvider} dataProvider={dataProvider} dashboard={RoleDashboard} loginPage={LoginWithEmail} requireAuth>
         {permissions => RoleResources(permissions)}
     </Admin>
 );
