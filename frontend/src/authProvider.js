@@ -1,13 +1,4 @@
-function getCookie(name) {
-  const cookies = document.cookie.split(';');
-  for (let cookie of cookies) {
-    cookie = cookie.trim();
-    if (cookie.startsWith(name + '=')) {
-      return decodeURIComponent(cookie.substring(name.length + 1));
-    }
-  }
-  return null;
-}
+import { handleError, getCookie } from './utils';
 
 export const authProvider = {
   login: async ({ username, password }) => {
@@ -20,14 +11,8 @@ export const authProvider = {
       },
     });
 
-    const response = await fetch(request);
-
-    if (!response.ok) {
-      throw new Error('Login failed');
-    }
-
+    const response = handleError(await fetch(request));
     const data = await response.json();
-
     localStorage.setItem('token', data.key);
   },
 
@@ -51,11 +36,17 @@ export const authProvider = {
   },
 
   getPermissions: async () => {
-      const response = await fetch("/api/my_role");
+      const token = localStorage.getItem("token");
+      const request = new Request('/api/my_role', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json',
+          "X-CSRFToken": getCookie("csrftoken")
+        },
+      });
+      const response = handleError(await fetch(request));
       const data = await response.json();
-      if (!response.ok) {
-        return "unknown";
-      }
       return data.role;
   },
 };
