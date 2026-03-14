@@ -2,6 +2,146 @@ from django.core.management.base import BaseCommand
 from app.models import Account, Lecturer, Course, Subject, Student
 import os
 
+TESTDATA = {
+  "lecturers": [
+    {"name": "Daniel Carter", "email": "danielcarter@example.com"},
+    {"name": "Olivia Bennett", "email": "oliviabennett@example.com"},
+    {"name": "Marcus Hughes", "email": "marcushughes@example.com"},
+    {"name": "Sophie Reynolds", "email": "sophiereynolds@example.com"},
+    {"name": "Ethan Walker", "email": "ethanwalker@example.com"}
+  ],
+  "courses": [
+    {"name": "Programming Fundamentals", "lecturer": "Daniel Carter"},
+    {"name": "Data Structures", "lecturer": "Olivia Bennett"},
+    {"name": "Database Systems", "lecturer": "Marcus Hughes"},
+    {"name": "Web Development", "lecturer": "Sophie Reynolds"},
+    {"name": "Network Security", "lecturer": "Ethan Walker"},
+    {"name": "Digital Marketing", "lecturer": "Daniel Carter"},
+    {"name": "Financial Accounting", "lecturer": "Olivia Bennett"},
+    {"name": "Business Management", "lecturer": "Marcus Hughes"},
+    {"name": "Graphic Design", "lecturer": "Sophie Reynolds"},
+    {"name": "Animation Basics", "lecturer": "Ethan Walker"}
+  ],
+  "subjects": [
+    {
+      "name": "Computer Science",
+      "courses": [
+        "Programming Fundamentals",
+        "Data Structures",
+        "Database Systems",
+        "Web Development",
+        "Network Security"
+      ]
+    },
+    {
+      "name": "Business",
+      "courses": [
+        "Digital Marketing",
+        "Financial Accounting",
+        "Business Management"
+      ]
+    },
+    {
+      "name": "Creative Media",
+      "courses": [
+        "Graphic Design",
+        "Animation Basics"
+      ]
+    }
+  ],
+  "students": [
+    {
+      "name": "Jack Turner",
+      "email": "jackturner@example.com",
+      "subject": "Computer Science",
+      "enrolment": ["Programming Fundamentals", "Database Systems", "Web Development"]
+    },
+    {
+      "name": "Emily Dawson",
+      "email": "emilydawson@example.com",
+      "subject": "Computer Science",
+      "enrolment": ["Programming Fundamentals", "Data Structures"]
+    },
+    {
+      "name": "Ryan Clarke",
+      "email": "ryanclarke@example.com",
+      "subject": "Computer Science",
+      "enrolment": ["Data Structures", "Network Security"]
+    },
+    {
+      "name": "Hannah Price",
+      "email": "hannahprice@example.com",
+      "subject": "Computer Science",
+      "enrolment": ["Programming Fundamentals", "Web Development", "Network Security"]
+    },
+    {
+      "name": "Leo Morgan",
+      "email": "leomorgan@example.com",
+      "subject": "Computer Science",
+      "enrolment": ["Database Systems", "Data Structures"]
+    },
+    {
+      "name": "Ava Richardson",
+      "email": "avarichardson@example.com",
+      "subject": "Business",
+      "enrolment": ["Digital Marketing", "Business Management"]
+    },
+    {
+      "name": "Lucas Bennett",
+      "email": "lucasbennett@example.com",
+      "subject": "Business",
+      "enrolment": ["Financial Accounting", "Business Management"]
+    },
+    {
+      "name": "Mia Sanders",
+      "email": "miasanders@example.com",
+      "subject": "Business",
+      "enrolment": ["Digital Marketing", "Financial Accounting"]
+    },
+    {
+      "name": "Oliver Grant",
+      "email": "olivergrant@example.com",
+      "subject": "Business",
+      "enrolment": ["Digital Marketing", "Business Management", "Financial Accounting"]
+    },
+    {
+      "name": "Sophie Coleman",
+      "email": "sophiecoleman@example.com",
+      "subject": "Business",
+      "enrolment": ["Financial Accounting", "Business Management"]
+    },
+    {
+      "name": "Ethan Powell",
+      "email": "ethanpowell@example.com",
+      "subject": "Creative Media",
+      "enrolment": ["Graphic Design", "Animation Basics"]
+    },
+    {
+      "name": "Isabella Hughes",
+      "email": "isabellahughes@example.com",
+      "subject": "Creative Media",
+      "enrolment": ["Graphic Design", "Animation Basics"]
+    },
+    {
+      "name": "Mason Patel",
+      "email": "masonpatel@example.com",
+      "subject": "Creative Media",
+      "enrolment": ["Animation Basics", "Graphic Design"]
+    },
+    {
+      "name": "Grace Fisher",
+      "email": "gracefisher@example.com",
+      "subject": "Creative Media",
+      "enrolment": ["Graphic Design", "Animation Basics"]
+    },
+    {
+      "name": "Logan Ward",
+      "email": "loganward@example.com",
+      "subject": "Creative Media",
+      "enrolment": ["Animation Basics", "Graphic Design"]
+    }
+  ]
+}
 
 class Command(BaseCommand):
     help = "Seeds the database with test data"
@@ -23,44 +163,65 @@ class Command(BaseCommand):
             name=name, defaults={"account": account, **defaults}
         )
 
+    def create_admin(self, name, email):
+        admin, _ = self.create_account(name, email, None)
+        return admin
+
+    def create_lecturer(self, name, email):
+        lecturer, _ = self.create_account(name, email, Lecturer)
+        self.stdout.write(f"Creating lecturer {name}...")
+        return lecturer
+
+    def create_course(self, name, lecturer):
+        course, _ = Course.objects.update_or_create(
+            name=name, defaults={"lecturer": lecturer}
+        )
+        self.stdout.write(f"Creating course {name}...")
+        return course
+
+    def create_subject(self, name, courses):
+        subject, _ = Subject.objects.update_or_create(
+            name=name, defaults={}
+        )
+        for course in courses:
+            subject.courses.add(course.course_id)
+        subject.save()
+        self.stdout.write(f"Creating subject {name}...")
+        return subject
+
+    def create_student(self, name, email, subject, enrolment):
+        student, _ = self.create_account(
+            name, email, Student, defaults={"subject": subject}
+        )
+        for course in enrolment:
+            student.enrolment.add(course.course_id)
+        student.save()
+        self.stdout.write(f"Creating student {name}...")
+        return student
+
     def handle(self, *args, **options):
         self.stdout.write("Creating test data...")
 
-        admin, _ = self.create_account("admin", "admin@example.com", None)
+        self.create_admin("admin", "admin@example.com")
 
-        lecturer_john, _ = self.create_account("John", "john@example.com", Lecturer)
-        lecturer_mary, _ = self.create_account("Mary", "mary@example.com", Lecturer)
+        lecturers = {}
+        for it in TESTDATA["lecturers"]:
+            lecturers[it["name"]] = self.create_lecturer(it["name"], it["email"])
 
-        course_math, _ = Course.objects.update_or_create(
-            name="Math", defaults={"lecturer": lecturer_john}
-        )
-        course_music, _ = Course.objects.update_or_create(
-            name="Music", defaults={"lecturer": lecturer_mary}
-        )
-        course_english, _ = Course.objects.update_or_create(
-            name="English", defaults={"lecturer": lecturer_john}
-        )
-        course_history, _ = Course.objects.update_or_create(
-            name="History", defaults={"lecturer": lecturer_mary}
-        )
+        courses = {}
+        for it in TESTDATA["courses"]:
+            courses[it["name"]] = self.create_course(it["name"], lecturers[it["lecturer"]])
 
-        subject_history, _ = Subject.objects.update_or_create(
-            name="History", defaults={}
-        )
-        subject_history.courses.add(course_english)
-        subject_history.courses.add(course_history)
-        subject_music, _ = Subject.objects.update_or_create(name="Music", defaults={})
-        subject_music.courses.add(course_math)
-        subject_music.courses.add(course_history)
-        subject_music.courses.add(course_music)
+        subjects = {}
+        for it in TESTDATA["subjects"]:
+            subject_courses = []
+            for itt in it["courses"]:
+                subject_courses.append(courses[itt])
+            subjects[it["name"]] = self.create_subject(it["name"], subject_courses)
 
-        student_jack, _ = self.create_account(
-            "Jack", "jack@example.com", Student, defaults={"subject": subject_history}
-        )
-        student_jack.enrolment.add(course_english)
-        student_jack.enrolment.add(course_history)
-        student_lee, _ = self.create_account(
-            "Lee", "lee@example.com", Student, defaults={"subject": subject_music}
-        )
-        student_lee.enrolment.add(course_math)
-        student_lee.enrolment.add(course_music)
+        for it in TESTDATA["students"]:
+            enrolment = []
+            for itt in it["enrolment"]:
+                enrolment.append(courses[itt])
+            self.create_student(it["name"], it["email"], subjects[it["subject"]], enrolment)
+
