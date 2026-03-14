@@ -58,7 +58,7 @@ const EnrolDropButton = (props) => {
 
 export const LecturerCourseList = () => (
     <List pagination={false}>
-        <DataTable bulkActionButtons={false}>
+        <DataTable bulkActionButtons={false} sort={false}>
             <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
             <DataTable.Col label="Actions" sx={{ width: "15rem" }}>
@@ -70,7 +70,7 @@ export const LecturerCourseList = () => (
 
 export const StudentEnrolmentCourseList = () => (
     <List pagination={false}>
-        <DataTable bulkActionButtons={false}>
+        <DataTable bulkActionButtons={false} sort={false}>
             <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
             <DataTable.Col source="lecturer.name" label="Lecturer" />
@@ -87,7 +87,7 @@ export const StudentEnrolmentCourseList = () => (
 
 export const StudentGradeList = () => (
     <List pagination={false}>
-        <DataTable bulkActionButtons={false}>
+        <DataTable bulkActionButtons={false} sort={false}>
             <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="course.name" label="Course Name" />
             <DataTable.Col source="given_by.name" label="Given By" />

@@ -23,7 +23,7 @@ const ChangePasswordButton = () => {
 
 export const AdminStudentList = () => (
     <List pagination={false}>
-        <DataTable bulkActionButtons={false} rowClick="show">
+        <DataTable bulkActionButtons={false} rowClick="show" sort={false}>
             <DataTable.Col source="student_id" label="Student ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
             <DataTable.Col source="account.email" label="Email" />
@@ -42,7 +42,7 @@ export const AdminStudentList = () => (
 
 export const AdminCourseList = () => (
     <List pagination={false}>
-        <DataTable bulkActionButtons={false}>
+        <DataTable bulkActionButtons={false} sort={false}>
             <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
 
@@ -56,7 +56,7 @@ export const AdminCourseList = () => (
 
 export const AdminSubjectList = () => (
     <List pagination={false}>
-        <DataTable bulkActionButtons={false}>
+        <DataTable bulkActionButtons={false} sort={false}>
             <DataTable.Col source="subject_id" label="Subject ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
 
@@ -70,7 +70,7 @@ export const AdminSubjectList = () => (
 
 export const AdminLecturerList = () => (
     <List pagination={false}>
-        <DataTable bulkActionButtons={false}>
+        <DataTable bulkActionButtons={false} sort={false}>
             <DataTable.Col source="lecturer_id" label="Lecturer ID" sx={{ width: "10rem" }} />
             <DataTable.Col source="name" label="Name" />
             <DataTable.Col source="account.email" label="Email" />

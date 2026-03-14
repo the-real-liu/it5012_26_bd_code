@@ -20,7 +20,7 @@ export const SubjectShow = (props) => (
             <TextField source="name" />
 
             <ReferenceArrayField source="courses" reference="courses">
-                <DataTable bulkActionButtons={false}>
+                <DataTable bulkActionButtons={false} sort={false}>
                     <DataTable.Col source="course_id" label="Course ID" />
                     <DataTable.Col source="name" label="Name" />
                 </DataTable>
@@ -51,7 +51,7 @@ export const CourseDetailShow = (props) => (
         <SimpleShowLayout>
             <TextField source="name" />
             <ArrayField source="student_set" label="My Students">
-              <DataTable bulkActionButtons={false}>
+              <DataTable bulkActionButtons={false} sort={false}>
                 <DataTable.Col source="student_id" label="Student ID" sx={{ width: "10rem" }} />
                 <DataTable.Col source="name" label="Name" />
                 <DataTable.Col source="account.email" label="Email" />
@@ -79,7 +79,7 @@ export const LecturerDashboardShow = (props) => (
             <TextField source="name" label="My Name" />
             <EmailField source="account.email" label="My Email" />
             <ArrayField source="course_set" label="Teaching Courses">
-              <DataTable bulkActionButtons={false}>
+              <DataTable bulkActionButtons={false} sort={false}>
                 <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
                 <DataTable.Col source="name" label="Name" />
               </DataTable>
@@ -97,7 +97,7 @@ export const StudentDashboardShow = (props) => (
             <TextField source="subject.name" label="My Subject" />
             <EmailField source="account.email" label="My Email" />
             <ArrayField source="enrolment" label="My Courses">
-              <DataTable bulkActionButtons={false}>
+              <DataTable bulkActionButtons={false} sort={false}>
                 <DataTable.Col source="course_id" label="Course ID" sx={{ width: "10rem" }} />
                 <DataTable.Col source="name" label="Name" />
                 <DataTable.Col source="lecturer.name" label="Lecturer" />
