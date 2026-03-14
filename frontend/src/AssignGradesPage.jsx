@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EditBase, SimpleForm, Form, Title, SimpleFormIterator, SelectInput, Toolbar, SaveButton, ReferenceInput, ArrayInput, TextInput, TextField, NumberInput } from "react-admin";
+import { EditBase, SimpleForm, Form, Title, SimpleFormIterator, AutocompleteInput, Toolbar, SaveButton, ReferenceInput, ArrayInput, TextInput, TextField, NumberInput } from "react-admin";
 import { Card, CardContent } from '@mui/material';
 
 const GradesTableToolbar = props => (
@@ -44,9 +44,10 @@ export const AssignGradesPage = () => {
                         source="course_id"
                         reference="lecturer_courses"
                     >
-                        <SelectInput
+                        <AutocompleteInput
+                            id="course_id"
                             optionText="name"
-                            onChange={(e) => setCourseId(e.target.value)}
+                            onChange={(value) => setCourseId(value)}
                         />
                     </ReferenceInput>
                   </Form>
