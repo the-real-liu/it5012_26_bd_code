@@ -11,7 +11,9 @@ export function getCookie(name) {
 
 export function handleError(response) {
   if (!response.ok) {
-    throw new Error(response.statusText);
+    let error = new Error(response.statusText);
+    error.status = response.status;
+    throw error;
   }
   return response;
 }

@@ -43,7 +43,10 @@ export const authProvider = {
         "X-CSRFToken": getCookie("csrftoken"),
       },
     });
-    const response = handleError(await fetch(request));
+    const response = await fetch(request);
+    if (!response.ok && (response.status == 401 || response.status == 403)) {
+      return "";
+    }
     const data = await response.json();
     return data.role;
   },
