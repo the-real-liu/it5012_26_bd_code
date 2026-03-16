@@ -1,3 +1,4 @@
+from django.http import HttpResponseForbidden
 from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -96,7 +97,10 @@ class LecturerDashboardView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        me = request.user.lecturer
+        try:
+            me = request.user.lecturer
+        except Lecturer.DoesNotExist:
+            return HttpResponseForbidden()
         serializer = LecturerDashboardSerializer(me)
         return Response(serializer.data)
 
@@ -169,7 +173,10 @@ class StudentDashboardView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        me = request.user.student
+        try:
+            me = request.user.student
+        except Student.DoesNotExist:
+            return HttpResponseForbidden()
         serializer = StudentDashboardSerializer(me)
         return Response(serializer.data)
 

@@ -135,10 +135,8 @@ const RoleResources = (permissions) => {
     return AdminRoleResources();
   } else if (permissions === "lecturer") {
     return LecturerRoleResources();
-  } else if (permissions === "student") {
-    return StudentRoleResources();
   } else {
-    return <></>;
+    return StudentRoleResources();
   }
 };
 
@@ -172,10 +170,8 @@ const RoleDashboard = () => {
     return AdminDashboard();
   } else if (permissions === "lecturer") {
     return LecturerDashboard();
-  } else if (permissions === "student") {
-    return StudentDashboard();
   } else {
-    return <></>;
+    return StudentDashboard();
   }
 };
 
