@@ -169,14 +169,16 @@ class Command(BaseCommand):
 
     def create_lecturer(self, name, email):
         lecturer, _ = self.create_account(name, email, Lecturer)
-        self.stdout.write(f"Creating lecturer {name}...")
+        if not self.silence:
+            self.stdout.write(f"Creating lecturer {name}...")
         return lecturer
 
     def create_course(self, name, lecturer):
         course, _ = Course.objects.update_or_create(
             name=name, defaults={"lecturer": lecturer}
         )
-        self.stdout.write(f"Creating course {name}...")
+        if not self.silence:
+            self.stdout.write(f"Creating course {name}...")
         return course
 
     def create_subject(self, name, courses):
@@ -186,7 +188,8 @@ class Command(BaseCommand):
         for course in courses:
             subject.courses.add(course.course_id)
         subject.save()
-        self.stdout.write(f"Creating subject {name}...")
+        if not self.silence:
+            self.stdout.write(f"Creating subject {name}...")
         return subject
 
     def create_student(self, name, email, subject, enrolment):
@@ -196,11 +199,18 @@ class Command(BaseCommand):
         for course in enrolment:
             student.enrolment.add(course.course_id)
         student.save()
-        self.stdout.write(f"Creating student {name}...")
+        if not self.silence:
+            self.stdout.write(f"Creating student {name}...")
         return student
 
     def handle(self, *args, **options):
-        self.stdout.write("Creating test data...")
+        if "silence" in options:
+            self.silence = options["silence"]
+        else:
+            self.silence = False
+
+        if not self.silence:
+            self.stdout.write("Creating test data...")
 
         self.create_admin("admin", "admin@example.com")
 
